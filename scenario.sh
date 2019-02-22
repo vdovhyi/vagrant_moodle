@@ -59,33 +59,5 @@ sudo tar xvzf moodle-latest-36.tgz -C /var/www/html/
 sudo chown -R apache:apache /var/www/html/moodle
 sudo chmod -R 755 /var/www/html/moodle
 
-#sudo echo "<?php  // Moodle configuration file
-
-#unset($CFG);
-#global $CFG;
-#$CFG = new stdClass();
-
-#$CFG->dbtype    = 'mysqli';
-#$CFG->dblibrary = 'native';
-#$CFG->dbhost    = 'localhost';
-#$CFG->dbname    = 'moodle';
-#$CFG->dbuser    = 'moodle';
-#$CFG->dbpass    = 'secretpassword';
-#$CFG->prefix    = 'mdl_';
-#$CFG->dboptions = array (
-#  'dbpersist' => 0,
-#  'dbport' => '',
-#  'dbsocket' => '',
-#  'dbcollation' => 'utf8mb4_general_ci',
-#);
-
-#$CFG->wwwroot   = 'http://192.168.33.10/moodle';
-#$CFG->dataroot  = '/var/www/moodledate';
-#$CFG->admin     = 'admin';
-
-#$CFG->directorypermissions = 0777;
-
-#require_once(__DIR__ . '/lib/setup.php');
-#" > /var/www/html/moodle/config.php
 sudo setenforce 0
 sudo systemctl restart httpd.service
