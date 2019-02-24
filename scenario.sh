@@ -29,20 +29,22 @@ set timeout 5
 spawn mysql -u root -p
 expect \"Enter password: \"
 send \"${MYSQL_PWD}\r\"
-			expect \"mysql>\"
-			send \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'MySQL!57';\r\"
+
 expect \"mysql>\"
-send \"uninstall plugin validate_password;\r\"
+send \"ALTER USER 'root'@'localhost' IDENTIFIED BY 'r00t_PA@@';\r\"
+
 expect \"mysql>\"
-send \"ALTER USER 'root'@'localhost' IDENTIFIED BY '';\r\"
-expect \"mysql>\"
-send \"CREATE USER 'vagrant'@'localhost';\r\"
+send \"CREATE USER 'moodle@localhost' IDENTIFIED BY 'user_PA@@w0rd';\r\"
+
 expect \"mysql>\"
 send \"CREATE DATABASE moodle;\r\"
+
 expect \"mysql>\"
-send \"GRANT ALL ON moodle.* TO 'moodle'@'localhost' IDENTIFIED BY 'secretpassword';\r\"
+send \"GRANT ALL ON *.* TO 'moodle'@'localhost' IDENTIFIED BY 'user_PA@@w0rd';\r\"
+
 expect \"mysql>\"
 send \"FLUSH PRIVILEGES;\r\"
+
 expect \"mysql>\"
 send \"quit;\r\"
 expect eof
@@ -58,6 +60,30 @@ sudo chown -R apache:apache /var/www/moodledata
 sudo tar xvzf moodle-latest-36.tgz -C /var/www/html/
 sudo chown -R apache:apache /var/www/html/moodle
 sudo chmod -R 755 /var/www/html/moodle
-
 sudo setenforce 0
+
+
+sudo /usr/bin/php /var/www/html/moodle/admin/cli/install.php --chmod=2770 \
+ --lang=en \
+ --wwwroot=http://192.168.33.10/moodle \
+ --dataroot=/var/www/moodledata \
+ --dbtype=mysqli \
+ --dbname=moodle \
+ --dbuser=moodle \
+ --dbpass=user_PA@@w0rd \
+ --dbhost=localhost \
+ --dbport=3306 \
+ --fullname=Moodle \
+ --shortname=moodle \
+ --summary=Moodle \
+ --adminuser=admin \
+ --adminpass=user_PA@@w0rd \
+ --allow-unstable \
+ --non-interactive \
+ --agree-license
+
+sudo chmod o+r /var/www/html/moodle/config.php
+sudo chown apache:apache /var/www/html/moodle/config.php
+
+
 sudo systemctl restart httpd.service
